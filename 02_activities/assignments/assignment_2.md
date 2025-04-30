@@ -10,24 +10,30 @@
 - For each visualization (good and bad):  
     - Explain (with reference to material covered up to date, along with readings and other scholarly sources, as needed) why you classified that visualization the way you did.
       ```
-      Your answer...
+      Bad Visualization: 
+      
+      https://public.tableau.com/app/profile/sports.chord/viz/HamiltonF1/HamiltonVertical
+      
+      I selected the "Lewis Hamilton F1 Career" visualization by James Smith as an example of a bad data visualization. The purpose of this visualization is to illustrate Hamilton’s F1 career, specifically his performance in each race. The top of the visualization includes summary statistics which are helpful in providing an overview. In the center, the circles represent possible finishing positions, while the lines connecting them indicate whether he gained or lost positions relative to his qualifying placement. Lines extending to the right represent positions gained, and those to the left indicate positions lost. The two colors correspond to the teams he raced for: McLaren and Mercedes.
+      
+      At first glance, the visualization appears visually striking since the layout resembles a racetrack. However, it’s difficult to understand all the information it is trying to convey. For example, the lines connecting the circles are shown in varying shades of blue and yellow, but there is no legend or explanation for what these differences mean. The bar charts at the bottom have no labeled axes, making it unclear what they represent until the user hovers over them. Only then is it revealed that they show the number of times Hamilton achieved each finishing position and the corresponding team. Overall, while the visualization is aesthetically creative, the layout and lack of guidance make it difficult to interpret Hamilton’s career trajectory. 
 
-
-
-
-
-
+      Good Visualization: 
+      
+      https://public.tableau.com/app/profile/bo.mccready8742/viz/FilmGenrePopularity-1910-2018/GenreRelativePopularity
+      
+      I selected the “Film Genre Popularity - 1910-2018” visualization by Bo McCready as an example of a good visualization. The purpose of this visualization is to illustrate the popularity of different film genres over the years, based on the percentage of films released that year with the specified genre tagged on IMDB. Each genre is represented by a distinct colour, which makes it easy to differentiate and compare. The plots are a combination of line and area plots which make it easy to understand the trends. The plots are all aligned along the same x-axis and the y-axis can be standardized so that viewers can compare popularity of one genre relative to another genre. The axes and functionality of the interactive plot are clearly labeled.
 
       ```
     - How could this data visualization have been improved?  
       ```
-      Your answer...
+      Bad Visualization:
+      
+      To improve the visualization, a legend can be added to explain the varying shades of the lines connect the circles. A timeline can also be added to convey Hamilton’s career progression. Additionally, since the overlapping circles are ambiguous, using different shapes and a corresponding legend would make it easier to interpret their meaning.
 
+      Good Visualization:
 
-
-
-
-
+      To improve this visualization, adding y-axis tick marks or horizontal grid lines on the plot so that viewers can better understand the significance of changes in popularity between years. In addition, displaying each genre as a separate plot is visually overwhelming. To address this, each genre could be plotted on a single chart, with each line representing each genre, and the interective feature could allow users to "highlight" or emphasize the selected genre by transforming the lines into an area plot.
       
       ```
 - Word count should not exceed (as a maximum) 500 words for each visualization (i.e. 
