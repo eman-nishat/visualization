@@ -1,0 +1,162 @@
+---
+title: "DSI Visualization - Assignment 3"
+author: "Eman Nishat"
+date: "2025-05-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width = 12, fig.height = 20)
+```
+
+```{r}
+# load libraries
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+In this report, we will use data from the Ontario Data Catalouge on the Career College Key Performance Indicators to determine the average graduate rate by college in Ontario. 
+
+```{r}
+# laod dataset
+df <- read.csv("overall_2022_kpi_report_for_publication_full_en.csv")
+# check dataset
+head(df) 
+# check column/variable names
+names(df)
+# check variable types
+summary(df)
+```
+```{r}
+# rename variables of interest
+colnames(df)[c(2,11)] <- c("COLLEGE_NAME", "GRAD_RATE")
+# check that variables were renamed
+names(df)
+```
+```{r}
+# set grad rate as numeric 
+
+## first remove % sign
+df$GRAD_RATE <- gsub("%", "", df$GRAD_RATE)
+## set as numeric
+df$GRAD_RATE <- as.numeric(df$GRAD_RATE)
+```
+
+```{r}
+# remove rows with NA for GRAD_RATE, and only keep columns of interest (graduate rate and college name)
+df_sub <- df[!is.na(df$GRAD_RATE), c(2,11)]
+```
+
+
+```{r}
+# calculate average graduation rate by college
+college_avg <- df_sub %>%
+  # multiple rows for each college due to multiple programs, so we're averaging across those rows
+  group_by(COLLEGE_NAME) %>%
+  summarize(avg_grad_rate = mean(GRAD_RATE, na.rm = TRUE)) %>%
+  # arrange in descending order
+  arrange(desc(avg_grad_rate))
+```
+
+## Top Colleges
+
+```{r}
+# select top 10 colleges with highest graduation rate for readability
+top10 <- college_avg %>% 
+  slice_max(avg_grad_rate, n = 10)
+
+# creating a bar chart 
+ggplot(top10, aes(x = reorder(COLLEGE_NAME, avg_grad_rate), y = avg_grad_rate)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  labs(
+    title = "Top 10 Colleges in Ontario by Average Graduation Rate",
+    x = "College",
+    y = "Average Graduation Rate (%)"
+  ) +
+  # for plot aesthetics, keep only border and remove any gridlines
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    # center the title
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    # rotate the x-axis labels 90 degrees for readability 
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+  )
+
+```
+
+Many colleges have 100$ graduation rate. We want to see other top colleges, with those with perfect rates removed.
+
+```{r}
+# filter out colleges with 100% average graduation rate
+college_top10 <- college_avg %>%
+  # select those with ratings less than 100
+  filter(avg_grad_rate < 100) %>%
+  # arrange in descending order and select top 10
+  arrange(desc(avg_grad_rate)) %>%
+  slice_head(n = 10)
+
+top10_plot <- ggplot(college_top10, aes(x = COLLEGE_NAME, y = avg_grad_rate)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  labs(
+    title = "Top 10 Ontario Colleges by Graduation Rate",
+    x = "College",
+    y = "Average Graduation Rate (%)"
+  ) +
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 11),
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+  )
+top10_plot
+
+```
+
+## Botton 10 Colleges
+
+We want to see which colleges have a low graduation rate.
+
+```{r}
+# some colleges with have a 0% average graduation rate, we want to exclude these
+college_bottom10 <- college_avg %>%
+  filter(avg_grad_rate > 0) %>%
+  arrange(avg_grad_rate) %>%
+  slice_head(n = 10)
+
+# Create bar chart
+bottom10_plot <- ggplot(college_bottom10, aes(x = COLLEGE_NAME, y = avg_grad_rate)) +
+  geom_bar(stat = "identity", fill = "tomato") +
+  labs(
+    title = "Bottom 10 Colleges by Graduation Rate",
+    x = "College",
+    y = "Average Graduation Rate (%)"
+  ) +
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 11),
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+  )
+bottom10_plot
+
+```
+
+```{r}
+# display plots together
+combined_plot <- ggarrange(top10_plot, bottom10_plot, ncol = 2, nrow = 1)
+# save plot
+ggsave("r_barchart.png", plot = combined_plot, width = 12, height = 15, dpi = 300)
+```
+
